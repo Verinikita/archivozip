@@ -1,1 +1,29 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Descomprimir Archivo ZIP</title>
+</head>
+<body>
+    <h1>Descomprimir Archivo ZIP</h1>
+    
+    {% if error %}
+        <p style="color: red;">{{ error }}</p>
+    {% endif %}
 
+    <form method="post" enctype="multipart/form-data">
+        <input type="file" name="file" accept=".zip">
+        <button type="submit">Descomprimir</button>
+    </form>
+
+    {% if content_list %}
+        <h2>Contenido del Archivo:</h2>
+        <ul>
+            {% for content in content_list %}
+                <li>{{ content }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+</body>
+</html>
