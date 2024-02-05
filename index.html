@@ -17,17 +17,21 @@
         <button type="submit">Descomprimir</button>
     </form>
 
-    {% if content_list %}
-        <h2>Contenido del Archivo:</h2>
+    {% if file_list %}
+        <h2>Archivos en el ZIP:</h2>
         <ul>
-            {% for content in content_list %}
-                <li>{{ content }}</li>
+            {% for filename in file_list %}
+                <li>
+                    {{ filename }}
+                    <a href="{{ url_for('download_file', filename=filename) }}" download>
+                        Descargar
+                    </a>
+                    <a href="{{ url_for('delete_files') }}" class="delete-link">
+                        Eliminar
+                    </a>
+                </li>
             {% endfor %}
         </ul>
-
-        <form method="post" action="/delete" style="margin-top: 20px;">
-            <button type="submit">Eliminar Archivos</button>
-        </form>
     {% endif %}
 </body>
 </html>
