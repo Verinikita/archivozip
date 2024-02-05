@@ -24,6 +24,10 @@
                 <li>{{ content }}</li>
             {% endfor %}
         </ul>
+
+        <form method="post" action="/delete" style="margin-top: 20px;">
+            <button type="submit">Eliminar Archivos</button>
+        </form>
     {% endif %}
 </body>
 </html>
