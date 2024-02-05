@@ -1,16 +1,14 @@
-from flask import Flask, request, render_template
+from flask import Flask, request, render_template, send_file
 import zipfile
 import os
 import io
 
 app = Flask(__name__)
 
-def extract_zip_content(zip_file):
+def get_zip_file_content(zip_file):
     content_list = []
     with zipfile.ZipFile(zip_file, 'r') as zip_data:
-        for file_info in zip_data.infolist():
-            with zip_data.open(file_info) as f:
-                content_list.append(f.read().decode('utf-8'))
+        content_list = zip_data.namelist()
     return content_list
 
 @app.route('/', methods=['GET', 'POST'])
@@ -29,17 +27,19 @@ def index():
             temp_path = 'temp.zip'
             file.save(temp_path)
 
-            # Obtener el contenido del archivo ZIP
-            content_list = extract_zip_content(temp_path)
+            # Obtener la lista de archivos en el archivo ZIP
+            file_list = get_zip_file_content(temp_path)
 
-            # Eliminar el archivo temporal después de obtener el contenido
-            os.remove(temp_path)
-
-            return render_template('index.html', content_list=content_list)
+            return render_template('index.html', file_list=file_list)
         else:
             return render_template('index.html', error='El archivo no es un archivo ZIP válido')
 
     return render_template('index.html')
+
+@app.route('/download/<filename>', methods=['GET'])
+def download_file(filename):
+    # Descargar el archivo seleccionado
+    return send_file(filename, as_attachment=True)
 
 @app.route('/delete', methods=['POST'])
 def delete_files():
